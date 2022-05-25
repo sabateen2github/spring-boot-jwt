@@ -28,7 +28,7 @@ public class AppUser {
   private String username;
 
   @Column(unique = true, nullable = false)
-  private String email;
+  private String instituteId;
 
   @Size(min = 8, message = "Minimum password length: 8 characters")
   private String password;
