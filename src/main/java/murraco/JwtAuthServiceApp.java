@@ -10,7 +10,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -29,16 +28,12 @@ public class JwtAuthServiceApp implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... params) throws Exception {
-        AppUser admin = new AppUser();
-        admin.setUsername("admin");
-        admin.setPassword("admin");
-        admin.setInstituteId("admin");
-        admin.setAppUserRoles(new ArrayList<AppUserRole>(Arrays.asList(AppUserRole.ROLE_ADMIN)));
-
-        userService.signup(admin);
-
-
+    public void run(String... args) throws Exception {
+        AppUser appUser = new AppUser();
+        appUser.setAppUserRoles(Arrays.asList(AppUserRole.ROLE_ADMIN));
+        appUser.setUsername("admin");
+        appUser.setPassword("admin");
+        appUser.setInstituteId("admin");
+        userService.signup(appUser);
     }
-
 }
