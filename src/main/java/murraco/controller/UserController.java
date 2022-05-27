@@ -1,6 +1,8 @@
 package murraco.controller;
 
 import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import murraco.dto.UserDataDTO;
 import murraco.dto.UserResponseDTO;
@@ -32,6 +34,7 @@ public class UserController {
         return userService.signin(username, password);
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/signup")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "${UserController.signup}")
@@ -43,6 +46,7 @@ public class UserController {
         return userService.signup(modelMapper.map(user, AppUser.class));
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping(value = "/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "${UserController.delete}", authorizations = {@Authorization(value = "apiKey")})
@@ -56,6 +60,7 @@ public class UserController {
         return username;
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/{username}")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @ApiOperation(value = "${UserController.search}", response = UserResponseDTO.class, authorizations = {@Authorization(value = "apiKey")})
@@ -68,6 +73,7 @@ public class UserController {
         return modelMapper.map(userService.search(username), UserResponseDTO.class);
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/me")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGEMENT') or hasRole('ROLE_HELP_DESK')")
     @ApiOperation(value = "${UserController.me}", response = UserResponseDTO.class, authorizations = {@Authorization(value = "apiKey")})
@@ -79,6 +85,7 @@ public class UserController {
         return modelMapper.map(userService.whoami(req), UserResponseDTO.class);
     }
 
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/refresh")
     @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGEMENT') or hasRole('ROLE_HELP_DESK')")
     public String refresh(HttpServletRequest req) {
