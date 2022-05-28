@@ -19,6 +19,7 @@ public class UserDataDTO {
     private String password;
     @ApiModelProperty(position = 2)
     private String instituteId;
-
+    @ApiModelProperty(position = 5)
+    private String newUsername;
 
 }

@@ -9,8 +9,10 @@ import murraco.dto.UserResponseDTO;
 import murraco.model.AppUser;
 import murraco.service.UserService;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -45,6 +47,21 @@ public class UserController {
     public String signup(@ApiParam("Signup User") @RequestBody UserDataDTO user) {
         return userService.signup(modelMapper.map(user, AppUser.class));
     }
+
+    @Operation(security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping("/signup")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @ApiOperation(value = "${UserController.editUser}")
+    @ApiResponses(value = {//
+            @ApiResponse(code = 400, message = "Something went wrong"), //
+            @ApiResponse(code = 403, message = "Access denied"), //
+            @ApiResponse(code = 422, message = "Username is already in use")})
+    public String editUser(@ApiParam("Signup User") @RequestBody UserDataDTO user) {
+        if (user.getUsername() == null)
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        return userService.editUser(user);
+    }
+
 
     @Operation(security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping(value = "/{username}")
